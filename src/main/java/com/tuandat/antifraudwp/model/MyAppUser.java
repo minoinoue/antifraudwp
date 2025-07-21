@@ -15,17 +15,17 @@ public class MyAppUser {
     private String username;
     private String email;
     private String password;
-    private String verficationToken;
+    private String verificationToken;
     private boolean isVerified;
     
     @Column(name = "reset_token")
     private String resetToken;
     
-    public String getVerficationToken() {
-        return verficationToken;
+    public String getVerificationToken() {
+        return verificationToken;
     }
-    public void setVerficationToken(String verficationToken) {
-        this.verficationToken = verficationToken;
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
     public boolean isVerified() {
         return isVerified;

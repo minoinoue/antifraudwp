@@ -1,17 +1,22 @@
 package com.tuandat.antifraudwp.controller;
 
+import java.util.Map;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tuandat.antifraudwp.model.MyAppUser;
 import com.tuandat.antifraudwp.model.MyAppUserRepository;
 import com.tuandat.antifraudwp.service.EmailService;
 import com.tuandat.antifraudwp.utils.JwtTokenUtil;
+import com.tuandat.antifraudwp.controller.RegistrationController;
 
 @RestController
 public class RegistrationController {
@@ -35,7 +40,7 @@ public class RegistrationController {
 				return new ResponseEntity<>("User Already exsit and verified.", HttpStatus.BAD_REQUEST);
 			} else {
 				String verificationToken = JwtTokenUtil.generateToken(user.getEmail());
-				existingAppUser.setVerficationToken(verificationToken);
+				existingAppUser.setVerificationToken(verificationToken);
 				myAppUserRepository.save(existingAppUser);
 				//Send email code
 				emailService.sendVerificationEmail(user.getEmail(), verificationToken);
@@ -44,7 +49,7 @@ public class RegistrationController {
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		String verificationToken = JwtTokenUtil.generateToken(user.getEmail());
-		user.setVerficationToken(verificationToken);
+		user.setVerificationToken(verificationToken);
 		myAppUserRepository.save(user);
 		//Send email code
 		emailService.sendVerificationEmail(user.getEmail(), verificationToken);
