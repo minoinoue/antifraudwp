@@ -1,0 +1,30 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: phungtuandat29052004@gmail.com
+    password: mwln bugz ejfa mmip
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    password: tuandat29052004
+    url: jdbc:postgresql://localhost:5432/registration
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect 
+        format_sql: true
+    show-sql: true
