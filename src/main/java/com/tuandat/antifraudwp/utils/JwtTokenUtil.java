@@ -17,6 +17,14 @@ public class JwtTokenUtil {
     private final static SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final static long EXPIRATION_TIME = 86400000;
 
+    private static JwtTokenUtil instance;
+    public JwtTokenUtil() {
+        instance = this;
+    }
+    public static JwtTokenUtil getInstance() {
+        return instance;
+    }
+
     public static String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)

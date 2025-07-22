@@ -20,4 +20,17 @@ public class ContentController {
         return "index";
     }
     
+    @GetMapping("/req/forgot-password-page")
+    public String forgotPasswordPage() {
+        return "forgot_password";
+    }
+    @GetMapping("/req/reset-password-page")
+    public String resetPasswordPage() {
+        return "reset_password";
+    }
+
+    @GetMapping("/login")
+    public String loginAlias() {
+        return "login";
+    }
 }

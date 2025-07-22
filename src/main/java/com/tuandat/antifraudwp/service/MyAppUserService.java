@@ -1,4 +1,4 @@
-package com.tuandat.antifraudwp.model;
+package com.tuandat.antifraudwp.service;
 
 import java.util.Optional;
 
@@ -9,18 +9,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.tuandat.antifraudwp.model.MyAppUser;
+import com.tuandat.antifraudwp.repository.MyAppUserRepository;
+
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor 
 public class MyAppUserService implements UserDetailsService{
-    
     @Autowired
     private MyAppUserRepository repository;
-    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
         Optional<MyAppUser> user = repository.findByUsername(username);
         if (user.isPresent()) {
             var userObj = user.get();
@@ -32,4 +32,4 @@ public class MyAppUserService implements UserDetailsService{
             throw new UsernameNotFoundException(username);
         }
     }  
-}
+} 

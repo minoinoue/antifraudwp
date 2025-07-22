@@ -1,74 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Home Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 10px;
-            text-align: center;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Phòng chống lừa đảo - Trang chủ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7fa; margin: 0; }
+    .container { max-width: 1200px; margin: auto; padding: 24px; }
+    .hero { background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%); color: #fff; border-radius: 16px; padding: 40px 32px 32px 32px; margin-bottom: 32px; box-shadow: 0 4px 24px rgba(25,118,210,0.08); }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+    .hero p { font-size: 1.2rem; }
+    .section-title { color: #1976d2; font-size: 1.6rem; margin: 32px 0 16px 0; font-weight: bold; }
+    .news-list, .video-list, .product-list { display: flex; flex-wrap: wrap; gap: 24px; }
+    .news-card, .video-card, .product-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(25,118,210,0.07); padding: 18px; flex: 1 1 300px; min-width: 280px; max-width: 350px; }
+    .news-card img, .video-card img, .product-card img { width: 100%; border-radius: 8px; margin-bottom: 10px; }
+    .news-card h3, .video-card h3, .product-card h3 { margin: 0 0 8px 0; font-size: 1.1rem; color: #1976d2; }
+    .news-card p, .video-card p, .product-card p { font-size: 0.98rem; color: #333; }
+    .form-report { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(25,118,210,0.07); padding: 24px; max-width: 500px; margin: 32px auto; }
+    .form-report label { display: block; margin-bottom: 6px; color: #1976d2; font-weight: 500; }
+    .form-report input, .form-report textarea { width: 100%; padding: 8px; margin-bottom: 14px; border-radius: 6px; border: 1px solid #b0bec5; font-size: 1rem; }
+    .form-report button { background: linear-gradient(90deg, #1976d2, #64b5f6); color: #fff; border: none; border-radius: 6px; padding: 10px 28px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .form-report button:hover { background: #1565c0; }
+    @media (max-width: 900px) { .news-list, .video-list, .product-list { flex-direction: column; } }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Home Page</h1>
-    </header>
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
-    </nav>
-    <main>
-        <h2>About Me</h2>
-        <p>This is a paragraph about me. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque nisl ut sapien interdum, nec ullamcorper velit dapibus. Sed ac vestibulum libero, nec tempor felis.</p>
-        <h2>Services</h2>
-        <p>These are the services I offer. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque nisl ut sapien interdum, nec ullamcorper velit dapibus. Sed ac vestibulum libero, nec tempor felis.</p>
-    </main>
-    <footer>
-        <p>Footer Content &copy; 2024</p>
-    </footer>
+  <div class="container">
+    <!-- Giới thiệu web -->
+    <section class="hero">
+      <h1>Phòng chống lừa đảo</h1>
+      <p>Website cung cấp thông tin, cảnh báo, hướng dẫn và công cụ giúp bạn nhận biết, phòng tránh các hình thức lừa đảo hiện đại. Hãy cùng chung tay bảo vệ cộng đồng khỏi các nguy cơ lừa đảo!</p>
+    </section>
+
+    <!-- Tin tức lừa đảo -->
+    <div class="section-title">Tin tức lừa đảo mới nhất</div>
+    <div class="news-list">
+      <!-- Tin tức mẫu, sẽ thay bằng dữ liệu động -->
+      <div class="news-card">
+        <img src="https://img.example.com/news1.jpg" alt="Tin tức 1">
+        <h3>Cảnh báo lừa đảo qua điện thoại</h3>
+        <p>Nội dung chi tiết về các chiêu trò lừa đảo qua điện thoại...</p>
+      </div>
+      <div class="news-card">
+        <img src="https://img.example.com/news2.jpg" alt="Tin tức 2">
+        <h3>Lừa đảo chuyển khoản ngân hàng</h3>
+        <p>Cách nhận biết và phòng tránh lừa đảo chuyển khoản...</p>
+      </div>
+    </div>
+
+    <!-- Video phòng chống lừa đảo -->
+    <div class="section-title">Video phòng chống lừa đảo</div>
+    <div class="video-list">
+      <div class="video-card">
+        <img src="https://img.example.com/video1.jpg" alt="Video 1">
+        <h3>Phòng chống lừa đảo online</h3>
+        <p>Video hướng dẫn các bước phòng chống lừa đảo trên mạng.</p>
+        <a href="https://youtube.com/watch?v=abc123" target="_blank" style="color:#1976d2;font-weight:bold;">Xem video</a>
+      </div>
+    </div>
+
+    <!-- Form báo cáo dấu hiệu lừa đảo -->
+    <div class="section-title">Báo cáo dấu hiệu lừa đảo</div>
+    <form class="form-report">
+      <label for="reporterName">Tên của bạn</label>
+      <input type="text" id="reporterName" name="reporterName" required>
+      <label for="reporterEmail">Email</label>
+      <input type="email" id="reporterEmail" name="reporterEmail" required>
+      <label for="phone">Số điện thoại liên quan</label>
+      <input type="text" id="phone" name="phone">
+      <label for="description">Mô tả dấu hiệu lừa đảo</label>
+      <textarea id="description" name="description" rows="3" required></textarea>
+      <label for="evidenceUrl">Link ảnh/chứng cứ (nếu có)</label>
+      <input type="url" id="evidenceUrl" name="evidenceUrl">
+      <button type="submit">Gửi báo cáo</button>
+    </form>
+
+    <!-- Mục mua bán hàng hóa phòng chống lừa đảo -->
+    <div class="section-title">Sản phẩm phòng chống lừa đảo</div>
+    <div class="product-list">
+      <div class="product-card">
+        <img src="https://img.example.com/product1.jpg" alt="Khóa chống trộm điện tử">
+        <h3>Khóa chống trộm điện tử</h3>
+        <p>Khóa cửa thông minh giúp phòng chống trộm cắp, lừa đảo.</p>
+        <p style="color:#1976d2;font-weight:bold;">1.200.000đ</p>
+        <button>Mua ngay</button>
+      </div>
+      <div class="product-card">
+        <img src="https://img.example.com/product2.jpg" alt="Camera an ninh mini">
+        <h3>Camera an ninh mini</h3>
+        <p>Camera nhỏ gọn, dễ lắp đặt, hỗ trợ giám sát phòng chống lừa đảo.</p>
+        <p style="color:#1976d2;font-weight:bold;">850.000đ</p>
+        <button>Mua ngay</button>
+      </div>
+    </div>
+  </div>
+  <script src="/js/index.js" defer></script>
 </body>
 </html>

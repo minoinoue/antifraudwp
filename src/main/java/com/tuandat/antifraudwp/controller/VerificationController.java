@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tuandat.antifraudwp.model.MyAppUser;
-import com.tuandat.antifraudwp.model.MyAppUserRepository;
+import com.tuandat.antifraudwp.repository.MyAppUserRepository;
 import com.tuandat.antifraudwp.utils.JwtTokenUtil;
 
 @RestController
