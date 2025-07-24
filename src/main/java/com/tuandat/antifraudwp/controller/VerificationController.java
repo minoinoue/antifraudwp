@@ -11,6 +11,8 @@ import com.tuandat.antifraudwp.model.MyAppUser;
 import com.tuandat.antifraudwp.repository.MyAppUserRepository;
 import com.tuandat.antifraudwp.utils.JwtTokenUtil;
 
+import java.util.Optional;
+
 @RestController
 public class VerificationController {
     
@@ -23,19 +25,29 @@ public class VerificationController {
     @GetMapping("/req/signup/verify")
     public ResponseEntity verifyEmail(@RequestParam("token") String token) {
         String emailString = jwtUtil.extractEmail(token);
-        MyAppUser user = myAppUserRepository.findByEmail(emailString);
-        if (user == null || user.getVerificationToken() == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token Expired!");
+        Optional<MyAppUser> userOpt = myAppUserRepository.findByEmail(emailString);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token đã hết hạn!");
         }
-        
+        MyAppUser user = userOpt.get();
+        if (user.getVerificationToken() == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token đã hết hạn!");
+        }
         if (!jwtUtil.validateToken(token) || !user.getVerificationToken().equals(token)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token Expired!");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token đã hết hạn!");
         }
         user.setVerificationToken(null);
         user.setVerified(true);  
         myAppUserRepository.save(user);
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body("Email successfully verified!");
+        String html = """
+        <html><head><meta charset='UTF-8'><title>Xác thực email</title>
+        <script>setTimeout(function(){ window.location.href='/req/login'; }, 2000);</script></head>
+        <body style='text-align:center;padding:40px;font-family:sans-serif;'>
+        <h2 style='color:green;'>Xác thực email thành công!</h2>
+        <p>Bạn sẽ được chuyển về trang đăng nhập sau vài giây...</p>
+        </body></html>
+        """;
+        return ResponseEntity.ok().header("Content-Type", "text/html; charset=UTF-8").body(html);
     }
     
     

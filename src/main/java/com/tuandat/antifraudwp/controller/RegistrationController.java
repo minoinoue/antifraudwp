@@ -1,6 +1,8 @@
 package com.tuandat.antifraudwp.controller;
 
 import java.util.Map;
+import java.util.Optional;
+import java.security.SecureRandom;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,88 +35,76 @@ public class RegistrationController {
 	@PostMapping (value = "/req/signup", consumes = "application/json")
 	public ResponseEntity<String> createUser(@RequestBody MyAppUser user) {
 		
-		MyAppUser existingAppUser = myAppUserRepository.findByEmail(user.getEmail());
-		
-		if(existingAppUser != null) {
+		Optional<MyAppUser> existingAppUserByEmail = myAppUserRepository.findByEmail(user.getEmail());
+		Optional<MyAppUser> existingAppUserByUsername = myAppUserRepository.findByUsername(user.getUsername());
+		if(existingAppUserByUsername.isPresent()) {
+			return new ResponseEntity<>("Username đã tồn tại.", HttpStatus.BAD_REQUEST);
+		}
+		if(existingAppUserByEmail.isPresent()) {
+			MyAppUser existingAppUser = existingAppUserByEmail.get();
 			if(existingAppUser.isVerified()) {
-				return new ResponseEntity<>("User Already exsit and verified.", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Email đã tồn tại.", HttpStatus.BAD_REQUEST);
 			} else {
+				// Nếu email đã tồn tại nhưng chưa xác thực, chỉ gửi lại email xác thực, không tạo user mới
 				String verificationToken = JwtTokenUtil.generateToken(user.getEmail());
 				existingAppUser.setVerificationToken(verificationToken);
 				myAppUserRepository.save(existingAppUser);
-				//Send email code
 				emailService.sendVerificationEmail(user.getEmail(), verificationToken);
-				return new ResponseEntity<>("Verification Email resent. Check your inbox", HttpStatus.OK);
+				return new ResponseEntity<>("Đã gửi lại email xác thực. Kiểm tra hộp thư.", HttpStatus.OK);
 			}
 		}
+		// Nếu username và email đều chưa tồn tại, mới tạo user mới
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		String verificationToken = JwtTokenUtil.generateToken(user.getEmail());
 		user.setVerificationToken(verificationToken);
 		myAppUserRepository.save(user);
-		//Send email code
 		emailService.sendVerificationEmail(user.getEmail(), verificationToken);
-		
-		return new ResponseEntity<>("Registration successfull! Please verify your email", HttpStatus.OK);
+		return new ResponseEntity<>("Đăng ký thành công! Vui lòng xác thực email.", HttpStatus.OK);
 	}
 
 	@PostMapping("/req/forgot-password")
 	public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
 		String email = request.get("email");
-		MyAppUser user = myAppUserRepository.findByEmail(email);
-		if (user == null) {
+		Optional<MyAppUser> userOpt = myAppUserRepository.findByEmail(email);
+		if (userOpt.isEmpty()) {
 			return new ResponseEntity<>("Email không tồn tại!", HttpStatus.BAD_REQUEST);
 		}
-		String resetToken = JwtTokenUtil.generateToken(email);
-		user.setResetToken(resetToken);
+		MyAppUser user = userOpt.get();
+		// Sinh mã OTP 6 số
+		String otp = String.format("%06d", new SecureRandom().nextInt(1000000));
+		user.setOtp(otp);
 		myAppUserRepository.save(user);
-		emailService.sendForgotPasswordEmail(email, resetToken);
-		return new ResponseEntity<>("Đã gửi email đặt lại mật khẩu!", HttpStatus.OK);
+		emailService.sendForgotPasswordEmail(email, otp);
+		return new ResponseEntity<>("Đã gửi mã OTP đặt lại mật khẩu!", HttpStatus.OK);
 	}
 
 	@PostMapping("/req/reset-password")
 	public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
-		String token = request.get("token");
+		String otp = request.get("token");
 		String newPassword = request.get("newPassword");
-		if (token == null || newPassword == null) {
+		if (otp == null || newPassword == null) {
 			return new ResponseEntity<>("Thiếu thông tin!", HttpStatus.BAD_REQUEST);
 		}
-		String email;
-		try {
-			email = JwtTokenUtil.getInstance().extractEmail(token);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Token không hợp lệ!", HttpStatus.BAD_REQUEST);
+		Optional<MyAppUser> userOpt = myAppUserRepository.findAll().stream().filter(u -> otp.equals(u.getOtp())).findFirst();
+		if (userOpt.isEmpty()) {
+			return new ResponseEntity<>("Mã OTP không hợp lệ hoặc đã hết hạn!", HttpStatus.BAD_REQUEST);
 		}
-		MyAppUser user = myAppUserRepository.findByEmail(email);
-		if (user == null || user.getResetToken() == null || !user.getResetToken().equals(token)) {
-			return new ResponseEntity<>("Token không hợp lệ hoặc đã hết hạn!", HttpStatus.BAD_REQUEST);
-		}
-		if (!JwtTokenUtil.getInstance().validateToken(token)) {
-			return new ResponseEntity<>("Token đã hết hạn!", HttpStatus.BAD_REQUEST);
-		}
+		MyAppUser user = userOpt.get();
 		user.setPassword(passwordEncoder.encode(newPassword));
-		user.setResetToken(null);
+		user.setOtp(null);
 		myAppUserRepository.save(user);
 		return new ResponseEntity<>("Đổi mật khẩu thành công!", HttpStatus.OK);
 	}
 
 	@PostMapping("/req/verify-reset-token")
 	public ResponseEntity<String> verifyResetToken(@RequestBody Map<String, String> request) {
-		String token = request.get("token");
-		if (token == null) {
-			return new ResponseEntity<>("Thiếu token!", HttpStatus.BAD_REQUEST);
+		String otp = request.get("token");
+		if (otp == null) {
+			return new ResponseEntity<>("Thiếu mã OTP!", HttpStatus.BAD_REQUEST);
 		}
-		String email;
-		try {
-			email = JwtTokenUtil.getInstance().extractEmail(token);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Token không hợp lệ!", HttpStatus.BAD_REQUEST);
-		}
-		MyAppUser user = myAppUserRepository.findByEmail(email);
-		if (user == null || user.getResetToken() == null || !user.getResetToken().equals(token)) {
-			return new ResponseEntity<>("Token không hợp lệ hoặc đã hết hạn!", HttpStatus.BAD_REQUEST);
-		}
-		if (!JwtTokenUtil.getInstance().validateToken(token)) {
-			return new ResponseEntity<>("Token đã hết hạn!", HttpStatus.BAD_REQUEST);
+		Optional<MyAppUser> userOpt = myAppUserRepository.findAll().stream().filter(u -> otp.equals(u.getOtp())).findFirst();
+		if (userOpt.isEmpty()) {
+			return new ResponseEntity<>("Mã OTP không hợp lệ hoặc đã hết hạn!", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>("OK", HttpStatus.OK);
 	}

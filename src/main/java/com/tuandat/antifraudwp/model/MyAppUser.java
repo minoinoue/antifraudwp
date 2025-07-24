@@ -21,6 +21,10 @@ public class MyAppUser {
     @Column(name = "reset_token")
     private String resetToken;
     
+    private String otp;
+    public String getOtp() { return otp; }
+    public void setOtp(String otp) { this.otp = otp; }
+    
     public String getVerificationToken() {
         return verificationToken;
     }

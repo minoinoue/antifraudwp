@@ -24,6 +24,9 @@ public class MyAppUserService implements UserDetailsService{
         Optional<MyAppUser> user = repository.findByUsername(username);
         if (user.isPresent()) {
             var userObj = user.get();
+            if (!userObj.isVerified()) {
+                throw new UsernameNotFoundException("Tài khoản chưa xác thực email.");
+            }
             return User.builder()
                     .username(userObj.getUsername())
                     .password(userObj.getPassword())

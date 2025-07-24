@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Signup Form</title>
+  <title>Đăng ký tài khoản</title>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <link rel="stylesheet" href="/css/style.css">
@@ -11,11 +11,11 @@
 <body>
   <section>
     <form action="/req/signup" method="post">
-      <h1>Sign Up</h1>
+      <h1>Đăng ký</h1>
         <div class="inputbox">
             <ion-icon name="person-outline"></ion-icon>
             <input type="text" id= "username" name="username" required>
-            <label for="">Name</label>
+            <label for="">Tên đăng nhập</label>
         </div>
         <div class="inputbox">
             <ion-icon name="mail-outline"></ion-icon>
@@ -26,35 +26,38 @@
         <div class="inputbox">
             <ion-icon name="lock-closed-outline"></ion-icon>
             <input type="password" id="password" name="password" required>
-            <label for="">Password</label>
+            <label for="">Mật khẩu</label>
         </div>  
         <div class="inputbox">
           <ion-icon name="lock-closed-outline"></ion-icon>
           <input type="password" id="passwordcon" name="passwordcon" required>
-          <label for="">Confirm Password</label>
+          <label for="">Nhập lại mật khẩu</label>
       </div>  
-        <button id= "submit" type="submit">Sign Up</button>
+        <button id= "submit" type="submit">Đăng ký</button>
       <div class="register">
-        <p>Already have an account? <a href="">Log In</a></p>
+        <p>Đã có tài khoản? <a href="/req/login" id="login-link">Đăng nhập</a></p>
       </div>
+      <div id="signup-message"></div>
     </form>
   </section>
 </body>
 </html>
 <script>
-  const submitButttom = document.getElementById("submit");
-  submitButttom.addEventListener('click',()=>{
+  const submitButton = document.getElementById("submit");
+  submitButton.addEventListener('click', (e) => {
+    e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('passwordcon').value;
     const email = document.getElementById('email').value;
-    const data ={
+    const data = {
       username,
       email,
       password
     }
-    
-    if(password == confirmPassword){
+    const messageDiv = document.getElementById('signup-message');
+    messageDiv.textContent = '';
+    if(password === confirmPassword){
       const jsonData = JSON.stringify(data);
       fetch('/req/signup', {
         method: 'POST',
@@ -63,15 +66,30 @@
         },
         body: jsonData
       })
-      .then(response =>{
-        //alert('succesfull');
-        //if(response.status == 200){
-          //alert('succesfull');
-        //xs}
+      .then(response => {
+        response.text().then(text => {
+          if(response.ok){
+            messageDiv.style.color = 'green';
+            messageDiv.textContent = 'Đăng ký thành công! Vui lòng kiểm tra email để xác thực trước khi đăng nhập.';
+          } else {
+            messageDiv.style.color = 'red';
+            if(text.includes('Username')){
+              messageDiv.textContent = 'Tên đăng nhập đã tồn tại!';
+            } else if(text.includes('email') || text.includes('Email') || text.includes('User đã tồn tại')){
+              messageDiv.textContent = 'Email đã tồn tại!';
+            } else {
+              messageDiv.textContent = 'Đăng ký thất bại: ' + text;
+            }
+          }
+        });
       })
+    } else {
+      messageDiv.style.color = 'red';
+      messageDiv.textContent = 'Mật khẩu xác nhận không khớp!';
     }
-    
-  })
-
-  
+  });
+  document.getElementById('login-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = '/req/login';
+  });
 </script>

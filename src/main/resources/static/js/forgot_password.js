@@ -13,6 +13,9 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', async f
     if (res.ok) {
       messageDiv.style.color = 'green';
       messageDiv.textContent = text;
+      setTimeout(() => {
+        window.location.href = '/req/reset-password-page';
+      }, 1000);
     } else {
       messageDiv.style.color = 'red';
       messageDiv.textContent = text;

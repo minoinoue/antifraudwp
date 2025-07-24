@@ -1,5 +1,9 @@
 // Không tự động điền token từ URL nữa
 
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const tokenInput = document.getElementById('token');
   const step1 = document.getElementById('step1');
