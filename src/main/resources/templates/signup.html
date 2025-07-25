@@ -68,7 +68,7 @@
       })
       .then(response => {
         response.text().then(text => {
-          if(response.ok){
+        if(response.ok){
             messageDiv.style.color = 'green';
             messageDiv.textContent = 'Đăng ký thành công! Vui lòng kiểm tra email để xác thực trước khi đăng nhập.';
           } else {
@@ -77,9 +77,9 @@
               messageDiv.textContent = 'Tên đăng nhập đã tồn tại!';
             } else if(text.includes('email') || text.includes('Email') || text.includes('User đã tồn tại')){
               messageDiv.textContent = 'Email đã tồn tại!';
-            } else {
+        } else {
               messageDiv.textContent = 'Đăng ký thất bại: ' + text;
-            }
+        }
           }
         });
       })
