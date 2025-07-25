@@ -13,26 +13,26 @@
     <section>
         
         <form action="/req/login" method="post">
-            <h1>Login</h1>
+            <h1>Đăng nhập</h1>
             <div class="dialog-row">
-                <label th:if="${param.error}" th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" class="text-center redText"></label>                   
+                <label th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION}" class="text-center redText"></label>                   
             </div>
             <div class="inputbox">
                 <ion-icon name="email-outline"></ion-icon>
                 <input name="username" id="username"type="name" required>
-                <label for="">username</label>
+                <label for="">Tên đăng nhập</label>
             </div>
             <div class="inputbox">
                 <ion-icon name="lock-closed-outline"></ion-icon>
                 <input name="password" type="password" id="password" required>
-                <label for="">Password</label>
+                <label for="">Mật khẩu</label>
             </div>
             <div class="register">
-                <p><a href="/req/forgot-password-page">Forget Password ?</a></p>
+                <p><a href="/req/forgot-password-page">Quên mật khẩu ?</a></p>
             </div>
-            <button>Log in</button>
+            <button>Đăng nhập</button>
             <div class="register">
-                <p>Don't have a account ?<a href="/req/signup"> Register!!</a></p>
+                <p>Chưa có tài khoản ?<a href="/req/signup"> Đăng ký ngay!!</a></p>
             </div>
         </form>
     </section>

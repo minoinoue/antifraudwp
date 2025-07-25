@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.stereotype.Service;
 
 import com.tuandat.antifraudwp.model.MyAppUser;
@@ -25,14 +26,14 @@ public class MyAppUserService implements UserDetailsService{
         if (user.isPresent()) {
             var userObj = user.get();
             if (!userObj.isVerified()) {
-                throw new UsernameNotFoundException("Tài khoản chưa xác thực email.");
+                throw new AccountStatusException("Tài khoản chưa xác thực email.") {};
             }
             return User.builder()
                     .username(userObj.getUsername())
                     .password(userObj.getPassword())
                     .build();    
         }else{
-            throw new UsernameNotFoundException(username);
+            throw new AccountStatusException("Tài khoản không tồn tại.") {};
         }
     }  
 } 
