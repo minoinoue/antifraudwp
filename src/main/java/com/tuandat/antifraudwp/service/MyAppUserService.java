@@ -14,6 +14,8 @@ import com.tuandat.antifraudwp.model.MyAppUser;
 import com.tuandat.antifraudwp.repository.MyAppUserRepository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.List;
 
 @Service
 @AllArgsConstructor 
@@ -31,6 +33,7 @@ public class MyAppUserService implements UserDetailsService{
             return User.builder()
                     .username(userObj.getUsername())
                     .password(userObj.getPassword())
+                    .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + userObj.getRole())))
                     .build();    
         }else{
             throw new AccountStatusException("Tài khoản không tồn tại.") {};

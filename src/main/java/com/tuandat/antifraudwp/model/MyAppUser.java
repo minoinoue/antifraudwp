@@ -25,6 +25,10 @@ public class MyAppUser {
     public String getOtp() { return otp; }
     public void setOtp(String otp) { this.otp = otp; }
     
+    private String role;
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    
     public String getVerificationToken() {
         return verificationToken;
     }
