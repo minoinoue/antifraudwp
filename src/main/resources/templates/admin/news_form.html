@@ -44,7 +44,7 @@
                 
                 <div class="form-group">
                     <label for="content">Nội dung *</label>
-                    <textarea id="content" name="content" th:text="${news.content}" required></textarea>
+                    <textarea id="content" name="contentDetail" th:text="${news.contentDetail}" required></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -62,6 +62,20 @@
                     <select id="status" name="status" th:value="${news.status}">
                         <option value="active" th:selected="${news.status == 'active'}">Hoạt động</option>
                         <option value="hidden" th:selected="${news.status == 'hidden'}">Ẩn</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Thể loại *</label>
+                    <select id="category" name="category.id" required>
+                        <option value="" disabled selected>Chọn thể loại</option>
+                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${news.category != null and news.category.id == cat.id}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tags">Tag</label>
+                    <select id="tags" name="tags" multiple size="4">
+                        <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}" th:selected="${news.tags != null and news.tags.contains(tag)}"></option>
                     </select>
                 </div>
                 

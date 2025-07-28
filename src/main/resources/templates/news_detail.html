@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${news.title}">Chi tiết tin tức</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7fa; margin: 0; }
+        .container { max-width: 800px; margin: auto; padding: 24px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(25,118,210,0.07); margin-top: 32px; }
+        .news-title { color: #1976d2; font-size: 2rem; margin-bottom: 10px; }
+        .news-meta { color: #888; font-size: 0.95rem; margin-bottom: 18px; }
+        .news-image { width: 100%; border-radius: 8px; margin-bottom: 18px; min-height: 180px; object-fit: cover; }
+        .news-content { font-size: 1.1rem; color: #222; line-height: 1.7; margin-bottom: 18px; }
+        .news-tags { margin-bottom: 18px; }
+        .news-tags span { background: #e3f2fd; color: #1976d2; border-radius: 4px; padding: 3px 10px; margin-right: 6px; font-size: 0.95rem; }
+        .news-ref { color: #1976d2; font-size: 0.98rem; }
+        .back-link { color: #1976d2; text-decoration: none; margin-bottom: 18px; display: inline-block; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div style="position:fixed;top:18px;right:32px;z-index:1000;display:flex;align-items:center;gap:12px;">
+      <span th:if="${#authorization.expression('isAuthenticated()')}" th:text="'Xin chào, ' + ${#authentication.name}"></span>
+      <form th:if="${#authorization.expression('isAuthenticated()')}" action="/logout" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger" style="padding:6px 16px;font-size:1rem;">Đăng xuất</button>
+      </form>
+    </div>
+    <div class="container">
+        <a href="/index" class="back-link">← Quay lại trang chủ</a>
+        <div class="news-title" th:text="${news.title}"></div>
+        <div class="news-meta">
+            <span th:text="'Tác giả: ' + ${news.author}"></span> |
+            <span th:text="${#temporals.format(news.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+            <span th:if="${news.category != null}">| Thể loại: <span th:text="${news.category.name}"></span></span>
+        </div>
+        <img th:src="${news.imageUrl}" th:alt="${news.title}" class="news-image">
+        <div class="news-content" th:text="${news.contentDetail}"></div>
+        <div class="news-tags">
+            <span th:each="tag : ${news.tags}" th:text="${tag.name}"></span>
+        </div>
+        <div class="news-ref" th:if="${news.reference != null}">
+            <b>Nguồn tham khảo:</b> <span th:text="${news.reference}"></span>
+        </div>
+        <div th:if="${news.extraImages != null}">
+            <b>Ảnh bổ sung:</b> <img th:src="${news.extraImages}" style="max-width:100px;max-height:100px;">
+        </div>
+    </div>
+</body>
+</html> 

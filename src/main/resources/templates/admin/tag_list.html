@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tag - Admin</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7fa; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .header { background: #1976d2; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .header h1 { margin: 0; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin: 5px; }
+        .btn-success { background: #4caf50; color: white; }
+        .btn-warning { background: #ff9800; color: white; }
+        .btn-danger { background: #f44336; color: white; }
+        .btn:hover { opacity: 0.8; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f5f5f5; font-weight: bold; }
+        tr:hover { background: #f9f9f9; }
+        .actions { display: flex; gap: 5px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #1976d2; text-decoration: none; margin-right: 20px; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quản lý tag</h1>
+        </div>
+        <div class="nav">
+            <a href="/admin/dashboard">← Dashboard</a>
+            <a href="/admin/news">← Quản lý tin tức</a>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <a href="/admin/tags/create" class="btn btn-success">+ Thêm tag mới</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên tag</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="tag : ${tags}">
+                    <td th:text="${tag.id}"></td>
+                    <td th:text="${tag.name}"></td>
+                    <td class="actions">
+                        <a th:href="@{/admin/tags/edit/{id}(id=${tag.id})}" class="btn btn-warning">Sửa</a>
+                        <form th:action="@{/admin/tags/delete/{id}(id=${tag.id})}" method="post" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa tag này?')">
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(tags)}">
+                    <td colspan="3" style="text-align: center; padding: 20px; color: #666;">Chưa có tag nào</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - Phòng chống lừa đảo</title>
@@ -32,9 +32,15 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="header" style="position:relative;">
             <h1>Admin Dashboard</h1>
             <p>Quản lý hệ thống phòng chống lừa đảo</p>
+            <div style="position:absolute;top:20px;right:30px;display:flex;align-items:center;gap:12px;">
+                <span sec:authorize="isAuthenticated()">Xin chào, <span sec:authentication="name"></span></span>
+                <form sec:authorize="isAuthenticated()" action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" style="padding:6px 16px;font-size:1rem;">Đăng xuất</button>
+                </form>
+            </div>
         </div>
         
         <div class="nav">
@@ -44,19 +50,19 @@
 
         <div class="stats">
             <div class="stat-card">
-                <div class="stat-number">0</div>
+                <div class="stat-number" th:text="${newsCount}">0</div>
                 <div class="stat-label">Tin tức</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">0</div>
+                <div class="stat-number" th:text="${videoCount}">0</div>
                 <div class="stat-label">Video</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">0</div>
+                <div class="stat-number" th:text="${productCount}">0</div>
                 <div class="stat-label">Sản phẩm</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">0</div>
+                <div class="stat-number" th:text="${reportCount}">0</div>
                 <div class="stat-label">Báo cáo</div>
             </div>
         </div>
