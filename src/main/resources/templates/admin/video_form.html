@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${video.id == null ? 'Thêm Video Mới' : 'Sửa Video'} + ' - Admin'">Quản lý Video - Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #45a049;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .content {
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        input[type="text"], input[type="url"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .form-actions {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .form-actions .btn {
+            margin: 0 10px;
+        }
+        .nav-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .nav-links a {
+            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 th:text="${video.id == null ? 'Thêm Video Mới' : 'Sửa Video'}">Quản lý Video</h1>
+            <p>Hệ thống quản lý video phòng chống lừa đảo</p>
+            <div class="user-info">
+                <span sec:authorize="isAuthenticated()">Xin chào, <span sec:authentication="name"></span></span>
+                <form sec:authorize="isAuthenticated()" action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-secondary" style="padding:6px 16px;font-size:1rem;">Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="content">
+            <form th:action="${video.id == null ? '/admin/videos/create' : '/admin/videos/edit/' + video.id}" 
+                  th:object="${video}" method="post">
+                
+                <div class="form-group">
+                    <label for="title">Tiêu đề:</label>
+                    <input type="text" id="title" th:field="*{title}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Mô tả:</label>
+                    <textarea id="description" th:field="*{description}" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoUrl">URL Video:</label>
+                    <input type="url" id="videoUrl" th:field="*{videoUrl}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="thumbnailUrl">URL Thumbnail:</label>
+                    <input type="url" id="thumbnailUrl" th:field="*{thumbnailUrl}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Trạng thái:</label>
+                    <select id="status" th:field="*{status}" required>
+                        <option value="active">Hoạt động</option>
+                        <option value="hidden">Ẩn</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" 
+                            th:text="${video.id == null ? 'Thêm Video' : 'Cập nhật Video'}">Lưu</button>
+                    <a href="/admin/videos" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
+            
+            <div class="nav-links">
+                <a href="/admin/dashboard">← Quay lại Dashboard</a>
+                <a href="/admin/videos">Danh sách Video</a>
+                <a href="/admin/news">Quản lý Tin tức</a>
+                <a href="/admin/products">Quản lý Sản phẩm</a>
+                <a href="/admin/reports">Quản lý Báo cáo</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Báo cáo - Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #45a049;
+        }
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #da190b;
+        }
+        .btn-info {
+            background: #2196F3;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #0b7dda;
+        }
+        .content {
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .status-pending {
+            color: #ff9800;
+            font-weight: bold;
+        }
+        .status-processing {
+            color: #2196F3;
+            font-weight: bold;
+        }
+        .status-done {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .nav-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .nav-links a {
+            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quản lý Báo cáo</h1>
+            <p>Hệ thống quản lý báo cáo lừa đảo</p>
+            <div class="user-info">
+                <span sec:authorize="isAuthenticated()">Xin chào, <span sec:authentication="name"></span></span>
+                <form sec:authorize="isAuthenticated()" action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" style="padding:6px 16px;font-size:1rem;">Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Người báo cáo</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Mô tả</th>
+                        <th>Bằng chứng</th>
+                        <th>Ngày báo cáo</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="report : ${reports}">
+                        <td th:text="${report.id}"></td>
+                        <td th:text="${report.reporterName}"></td>
+                        <td th:text="${report.reporterEmail}"></td>
+                        <td th:text="${report.phone}"></td>
+                        <td th:text="${#strings.abbreviate(report.description, 50)}"></td>
+                        <td th:text="${#strings.abbreviate(report.evidenceUrl, 30)}"></td>
+                        <td th:text="${#temporals.format(report.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:class="${report.status == 'pending' ? 'status-pending' : (report.status == 'processing' ? 'status-processing' : 'status-done')}" 
+                                  th:text="${report.status == 'pending' ? 'Chờ xử lý' : (report.status == 'processing' ? 'Đang xử lý' : 'Hoàn thành')}"></span>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/reports/view/{id}(id=${report.id})}" class="btn btn-info">Xem</a>
+                            <a th:href="@{/admin/reports/delete/{id}(id=${report.id})}" 
+                               class="btn btn-danger" 
+                               onclick="return confirm('Bạn có chắc muốn xóa báo cáo này?')">Xóa</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="nav-links">
+                <a href="/admin/dashboard">← Quay lại Dashboard</a>
+                <a href="/admin/news">Quản lý Tin tức</a>
+                <a href="/admin/categories">Quản lý Danh mục</a>
+                <a href="/admin/tags">Quản lý Tags</a>
+                <a href="/admin/videos">Quản lý Video</a>
+                <a href="/admin/products">Quản lý Sản phẩm</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
