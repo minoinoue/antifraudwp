@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tuandat.antifraudwp.model.MyAppUser;
@@ -22,6 +23,10 @@ import java.util.List;
 public class MyAppUserService implements UserDetailsService{
     @Autowired
     private MyAppUserRepository repository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<MyAppUser> user = repository.findByUsername(username);
@@ -38,5 +43,9 @@ public class MyAppUserService implements UserDetailsService{
         }else{
             throw new AccountStatusException("Tài khoản không tồn tại.") {};
         }
-    }  
+    }
+    
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
 } 
