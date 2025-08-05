@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${news.id == null ? 'Thêm Tin tức Mới' : 'Sửa Tin tức'} + ' - Admin'"></title>
+    <title th:text="${news.id == null ? 'Thêm tin tức mới' : 'Sửa tin tức'} + ' - Admin'"></title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -59,7 +59,7 @@
         input[type="text"], input[type="url"], textarea, select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 2px solid #e1e5e9;
             border-radius: 6px;
             font-size: 14px;
             box-sizing: border-box;
@@ -111,6 +111,8 @@
         .actions {
             text-align: center;
             margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
         }
         .nav-links {
             margin-top: 20px;
@@ -124,12 +126,15 @@
         .nav-links a:hover {
             text-decoration: underline;
         }
+        .required {
+            color: #f44336;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1 th:text="${news.id == null ? 'Thêm Tin tức Mới' : 'Sửa Tin tức'}"></h1>
+            <h1 th:text="${news.id == null ? 'Thêm tin tức mới' : 'Sửa tin tức'}"></h1>
             <p>Quản lý tin tức phòng chống lừa đảo</p>
             <div class="user-info">
                 <span sec:authorize="isAuthenticated()">Xin chào, <span sec:authentication="name"></span></span>
@@ -142,33 +147,23 @@
         <div class="content">
             <form th:action="${news.id == null ? '/admin/news/create' : '/admin/news/edit/' + news.id}" method="post" th:object="${news}">
                 <div class="form-group">
-                    <label for="title">Tiêu đề *</label>
+                    <label for="title">Tiêu đề <span class="required">*</span></label>
                     <input type="text" id="title" name="title" th:value="${news.title}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="content">Nội dung *</label>
+                    <label for="content">Nội dung <span class="required">*</span></label>
                     <textarea id="content" name="contentDetail" th:text="${news.contentDetail}" required></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="author">Tác giả *</label>
+                    <label for="author">Tác giả <span class="required">*</span></label>
                     <input type="text" id="author" name="author" th:value="${news.author}" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="imageUrl">URL ảnh</label>
                     <input type="url" id="imageUrl" name="imageUrl" th:value="${news.imageUrl}" placeholder="https://example.com/image.jpg">
-                </div>
-                
-                <div class="form-group">
-                    <label for="reference">Nguồn tham khảo</label>
-                    <input type="text" id="reference" name="reference" th:value="${news.reference}" placeholder="Nguồn tham khảo">
-                </div>
-                
-                <div class="form-group">
-                    <label for="extraImages">Ảnh bổ sung</label>
-                    <textarea id="extraImages" name="extraImages" th:text="${news.extraImages}" placeholder="Danh sách URL ảnh bổ sung, phân cách bằng dấu phẩy"></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -180,9 +175,9 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="category">Danh mục *</label>
+                    <label for="category">Thể loại <span class="required">*</span></label>
                     <select id="category" name="category.id" required>
-                        <option value="" disabled selected>Chọn danh mục</option>
+                        <option value="" disabled selected>Chọn thể loại</option>
                         <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${news.category != null and news.category.id == cat.id}"></option>
                     </select>
                 </div>
@@ -192,24 +187,23 @@
                     <select id="tags" name="tags" multiple size="4">
                         <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}" th:selected="${news.tags != null and news.tags.contains(tag)}"></option>
                     </select>
-                    <small style="color: #666;">Giữ Ctrl (hoặc Cmd trên Mac) để chọn nhiều tags</small>
+                    <small style="color: #666; font-size: 12px;">Giữ Ctrl (hoặc Cmd trên Mac) để chọn nhiều tags</small>
                 </div>
                 
                 <div class="actions">
-                    <button type="submit" class="btn btn-primary" th:text="${news.id == null ? 'Thêm Tin tức' : 'Cập nhật'}"></button>
+                    <button type="submit" class="btn btn-primary" th:text="${news.id == null ? 'Thêm tin tức' : 'Cập nhật'}"></button>
                     <a href="/admin/news" class="btn btn-secondary">Hủy</a>
                 </div>
             </form>
             
             <div class="nav-links">
-                <a href="/admin/news">← Quay lại danh sách</a>
-                <a href="/admin/dashboard">← Dashboard</a>
+                <a href="/admin/news">← Quay lại danh sách tin tức</a>
+                <a href="/admin/dashboard">← Quay lại Dashboard</a>
+                <a href="/admin/videos">Quản lý Video</a>
                 <a href="/admin/categories">Quản lý Danh mục</a>
                 <a href="/admin/tags">Quản lý Tags</a>
-                <a href="/admin/videos">Quản lý Video</a>
                 <a href="/admin/products">Quản lý Sản phẩm</a>
                 <a href="/admin/reports">Quản lý Báo cáo</a>
-                <a href="/admin/users">Quản lý Người dùng</a>
             </div>
         </div>
     </div>

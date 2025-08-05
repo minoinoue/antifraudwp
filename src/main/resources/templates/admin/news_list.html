@@ -159,7 +159,7 @@
                 <tbody>
                     <tr th:each="news : ${newsList}">
                         <td th:text="${news.id}"></td>
-                        <td th:text="${news.title}"></td>
+                        <td th:text="${#strings.abbreviate(news.title, 50)}"></td>
                         <td th:text="${news.author}"></td>
                         <td th:text="${news.category != null ? news.category.name : 'N/A'}"></td>
                         <td>
@@ -178,17 +178,19 @@
                                onclick="return confirm('Bạn có chắc muốn xóa tin tức này?')">Xóa</a>
                         </td>
                     </tr>
+                    <tr th:if="${#lists.isEmpty(newsList)}">
+                        <td colspan="8" style="text-align: center; padding: 20px; color: #666;">Chưa có tin tức nào</td>
+                    </tr>
                 </tbody>
             </table>
             
             <div class="nav-links">
                 <a href="/admin/dashboard">← Quay lại Dashboard</a>
+                <a href="/admin/videos">Quản lý Video</a>
                 <a href="/admin/categories">Quản lý Danh mục</a>
                 <a href="/admin/tags">Quản lý Tags</a>
-                <a href="/admin/videos">Quản lý Video</a>
                 <a href="/admin/products">Quản lý Sản phẩm</a>
                 <a href="/admin/reports">Quản lý Báo cáo</a>
-                <a href="/admin/users">Quản lý Người dùng</a>
             </div>
         </div>
     </div>
