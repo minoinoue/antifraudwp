@@ -199,15 +199,15 @@
                                   th:text="${user.role == 'ADMIN' ? 'ADMIN' : 'USER'}"></span>
                         </td>
                         <td>
-                            <span th:class="${user.isVerified ? 'status-verified' : 'status-unverified'}" 
-                                  th:text="${user.isVerified ? 'Đã xác thực' : 'Chưa xác thực'}"></span>
+                            <span th:class="${user.verified ? 'status-verified' : 'status-unverified'}" 
+                                  th:text="${user.verified ? 'Đã xác thực' : 'Chưa xác thực'}"></span>
                         </td>
                         <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
                         <td>
                             <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="btn btn-warning">Sửa</a>
                             <a th:href="@{/admin/users/toggle-verification/{id}(id=${user.id})}" 
                                class="btn btn-info" 
-                               th:text="${user.isVerified ? 'Hủy xác thực' : 'Xác thực'}"
+                               th:text="${user.verified ? 'Hủy xác thực' : 'Xác thực'}"
                                onclick="return confirm('Bạn có chắc muốn thay đổi trạng thái xác thực email?')"></a>
                             <a th:if="${user.role != 'ADMIN'}" 
                                th:href="@{/admin/users/delete/{id}(id=${user.id})}" 

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import java.time.LocalDateTime;
 
 @Entity
 public class MyAppUser {
@@ -28,6 +30,22 @@ public class MyAppUser {
     private String role;
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
     
     public String getVerificationToken() {
         return verificationToken;
@@ -71,7 +89,4 @@ public class MyAppUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
-    
 }

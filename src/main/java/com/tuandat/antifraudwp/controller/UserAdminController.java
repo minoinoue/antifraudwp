@@ -54,7 +54,7 @@ public class UserAdminController {
             user.setPassword(userService.encodePassword(user.getPassword()));
             
             // Mặc định là chưa xác thực email
-            user.setIsVerified(false);
+            user.setVerified(false);
             
             // Mặc định role là USER nếu không được set
             if (user.getRole() == null) {
@@ -111,7 +111,7 @@ public class UserAdminController {
             existingUser.setUsername(user.getUsername());
             existingUser.setEmail(user.getEmail());
             existingUser.setRole(user.getRole());
-            existingUser.setIsVerified(user.getIsVerified());
+            existingUser.setVerified(user.isVerified());
 
             // Chỉ cập nhật mật khẩu nếu có thay đổi
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
@@ -157,10 +157,10 @@ public class UserAdminController {
             Optional<MyAppUser> userOpt = userRepository.findById(id);
             if (userOpt.isPresent()) {
                 MyAppUser user = userOpt.get();
-                user.setIsVerified(!user.getIsVerified());
+                user.setVerified(!user.isVerified());
                 userRepository.save(user);
                 
-                String status = user.getIsVerified() ? "xác thực" : "hủy xác thực";
+                String status = user.isVerified() ? "xác thực" : "hủy xác thực";
                 redirectAttributes.addFlashAttribute("success", "Đã " + status + " email cho người dùng!");
             } else {
                 redirectAttributes.addFlashAttribute("error", "Không tìm thấy người dùng!");
